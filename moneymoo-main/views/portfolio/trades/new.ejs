@@ -1,0 +1,45 @@
+<%- include('../../partials/_header') %>
+    <title>Portfolio</title>
+</head>
+<body>
+    <%- include('../../partials/_navbar') %>
+    <p class="ml-6 mr-5 mt-5 mb-3"><a href="/portfolio?id=<%= portfolio._id %>">Back to Portfolio</a></p>
+    <div class="ml-6 mr-6 mt-4 mb-4 is-flex is-flex-direction-column is-gap-3">
+        <h1 class="is-size-3 has-text-centered" style="font-weight: 600;">Add a Trade</h1>
+        <div class="container" style="max-width: 450px;">
+            <form action="/portfolio/<%= portfolio._id %>" method="POST" class="box">
+                <div class="field">
+                    <label for="type" class="label">Trade:</label>
+                    <div class="select is-link">
+                        <select name="type" id="type" required >
+                        <option>Buy</option>
+                        <option>Sell</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="symbol" class="label">Stock Symbol</label>
+                    <input type="text" name="symbol" id="symbol" required class="input is-normal" placeholder="NFLX"/>
+                </div>
+                <div class="field">
+                    <label for="date" class="label">Date</label>
+                    <input type="date" name="date" id="date" required class="input is-normal"/>
+                </div>
+                <div class="field">
+                    <label for="quantity" class="label">Quantity</label>
+                    <input type="text" name="quantity" id="quantity" required class="input is-normal" />
+                </div>
+                <div class="field">
+                    <label for="price" class="label">Price per share</label>
+                    <input type="text" name="price" id="price" required class="input is-normal" />
+                </div>
+                <div class="field">
+                    <label for="notes" class="label">Notes</label>
+                    <textarea id="notes" name="notes" placeholder="Write something here" class="textarea"></textarea>
+                </div>
+                <button type="submit" class="button is-link mt-3" style="width: 100%;">Add Trade</button>
+            </form> 
+        </div>
+    </div>
+</body>
+</html>

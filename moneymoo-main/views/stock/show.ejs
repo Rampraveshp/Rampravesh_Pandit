@@ -1,0 +1,243 @@
+<%- include('../partials/_header') %>
+    <title><%= stock.symbol %></title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <div class="ml-6 mr-6 mt-6">
+        <div class="is-flex is-flex-direction-column is-align-items-center ml-6 mr-6 mb-6">
+            <div class="is-flex is-flex-direction-row is-justify-content-center is-align-items-center is-gap-5 m-2">
+                <img src="<%= stock.image %>" alt="logo for <%= stock.symbol %>" class="image is-96x96"/>
+                <div>
+                    <h1 class="is-size-4"><%= stock.symbol %> • <%= stock.exchange %></h1>
+                    <h2 class="is-size-3"><%= stock.companyName %></h2>
+                    <h2 class="is-size-1">$<%= (stock.price).toFixed(2) %></h2>
+                </div>
+            </div>
+            <p><a href="/watchlist/add?symbol=<%= stock.symbol %>" class="button is-link mt-3">+ Add to Watchlist</a></p>
+        </div>
+
+        <div class="is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center is-gap-5 m-6">
+            <div class="content m-1 box container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 400px;">
+                <h3>Stock Details</h3>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Market Cap</th>
+                            <td><%= stock.marketCap %></td>
+                        </tr>
+                        <tr>
+                            <th>Day Change</th>
+                            <td><%= stock.change %> (<%= (stock.changePercentage).toFixed(2) %>%)</td>
+                        </tr>
+                        <tr>
+                            <th>Volume</th>
+                            <td><%= stock.volume %></td>
+                        </tr>
+                        <tr>
+                            <th>Avg Volume</th>
+                            <td><%= stock.averageVolume %></td>
+                        </tr>
+                        <tr>
+                            <th>Price Range</th>
+                            <td><%= stock.range %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="content box container m-1 is-flex is-flex-direction-column has-text-centered" style="max-width: 450px; min-width: 400px;">
+                <h3 class="has-text-centered">Overview</h3>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Country</th>
+                            <td><%= stock.country %></td>
+                        </tr>
+                        <tr>
+                            <th>Sector</th>
+                            <td><%= stock.sector %></td>
+                        </tr>
+                        <tr>
+                            <th>Industry</th>
+                            <td><%= stock.industry %></td>
+                        </tr>
+                        <tr>
+                            <th>Exchange</th>
+                            <td><%= stock.exchange %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="content box container is-flex is-flex-direction-column is-align-items-left is-gap-1 mb-5" style="max-width: 950px;">
+            <h3>Company Profile</h3>
+            <%- stock.website ? `<p class="button is-link is-small is-outlined" style="max-width: 75px;"><a href="${stock.website}" target="_blank">Website</a></p>` : null %>
+            <%- stock.isEtf ? '<p>* Exchange-Traded Fund</p>' : null %>
+            <%- stock.isFund ? '<p>* Index Fund</p>' : null %>
+            <p><%= stock.description %></p>
+        </div>
+
+        <% if (financials) { %>
+            <div class="is-flex is-flex-direction-row is-align-items-top is-justify-content-center">
+                <div class="is-flex is-flex-direction-column is-justify-content-top m-5">
+                    <div class="box content container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Financial Overview</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>52 Week High</th>
+                                    <td><%= financials['52WeekHigh'] && financials['52WeekHigh'] %></td>
+                                </tr>
+                                <tr>
+                                    <th>52 Week High Date</th>
+                                    <td><%= financials['52WeekHighDate'] && financials['52WeekHighDate'] %></td>
+                                </tr>
+                                <tr>
+                                    <th>52 Week Low</th>
+                                    <td><%= financials['52WeekLow'] && financials['52WeekLow'] %></td>
+                                </tr>
+                                <tr>
+                                    <th>52 Week Low Date</th>
+                                    <td><%= financials['52WeekLowDate'] && financials['52WeekLowDate'] %></td>
+                                </tr>
+                                <tr>
+                                    <th>10D Avg Trading Vol</th>
+                                    <td><%= financials['10DayAverageTradingVolume'] && financials['10DayAverageTradingVolume'] %></td>
+                                </tr>
+                                <tr>
+                                    <th>YTD Price Return Daily</th>
+                                    <td><%= financials.yearToDatePriceReturnDaily && financials.yearToDatePriceReturnDaily %></td>
+                                </tr>
+                                <tr>
+                                    <th>MTD Price Return Daily</th>
+                                    <td><%= financials.monthToDatePriceReturnDaily && financials.monthToDatePriceReturnDaily %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% if (financials.cashFlowPerShareTTM || financials.cashFlowPerShareQuarterly || financials.cashFlowPerShareAnnual) { %>
+                    <div class="mt-5 box content container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Cash Flow</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>TTM/Share</th>
+                                    <td><%= financials.cashFlowPerShareTTM && financials.cashFlowPerShareTTM %></td>
+                                </tr>
+                                <tr>
+                                    <th>Annual/Share</th>
+                                    <td><%= financials.cashFlowPerShareAnnual && financials.cashFlowPerShareAnnual %></td>
+                                </tr>
+                                <tr>
+                                    <th>Quarterly/Share</th>
+                                    <td><%= financials.cashFlowPerShareQuarterly && financials.cashFlowPerShareQuarterly %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                    <% if (financials.currentRatioAnnual || financials.currentRatioQuarterly || financials.peTTM) { %>
+                    <div class="mt-5 box content container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Price-to-Earnings</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Annual Ratio</th>
+                                    <td><%= financials.currentRatioAnnual && financials.currentRatioAnnual %></td>
+                                </tr>
+                                <tr>
+                                    <th>Quarterly Ratio</th>
+                                    <td><%= financials.currentRatioQuarterly && financials.currentRatioQuarterly %></td>
+                                </tr>
+                                <tr>
+                                    <th>TTM</th>
+                                    <td><%= financials.peTTM && financials.peTTM %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                </div>
+                <div class="is-flex is-flex-direction-column is-align-items-center m-5">
+                    <% if (financials.revenuePerShareAnnual || financials.revenuePerShareTTM) { %>
+                    <div class="box content container has-text-centered is-flex is-flex-direction-column is-align-items-center" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Revenue</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>3Y Growth</th>
+                                    <td><%= financials.revenueGrowth3Y && financials.revenueGrowth3Y %></td>
+                                </tr>
+                                <tr>
+                                    <th>5Y Growth</th>
+                                    <td><%= financials.revenueGrowth5Y && financials.revenueGrowth5Y %></td>
+                                </tr>
+                                <tr>
+                                    <th>Annual/Share</th>
+                                    <td><%= financials.revenueGrowthQuarterlyYoy && financials.revenueGrowthQuarterlyYoy %></td>
+                                </tr>
+                                <tr>
+                                    <th>TTM/Share</th>
+                                    <td><%= financials.revenuePerShareTTM && financials.revenuePerShareTTM %></td>
+                                </tr>
+                                <tr>
+                                    <th>5Y Share Growth</th>
+                                    <td><%= financials.revenueShareGrowth5Y && financials.revenueShareGrowth5Y %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                    <% if (financials.epsAnnual) { %>
+                    <div class="mt-5 box content container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Earnings Per Share</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Annual</th>
+                                    <td><%= financials.epsAnnual && financials.epsAnnual %></td>
+                                </tr>
+                                <tr>
+                                    <th>3Y Growth</th>
+                                    <td><%= financials.epsGrowth3Y && financials.epsGrowth3Y %></td>
+                                </tr>
+                                <tr>
+                                    <th>5Y Growth</th>
+                                    <td><%= financials.epsGrowth5Y && financials.epsGrowth5Y %></td>
+                                </tr>
+                                <tr>
+                                    <th>Quarterly YOY Growth</th>
+                                    <td><%= financials.epsGrowthQuarterlyYoy && financials.epsGrowthQuarterlyYoy %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                    <% if (financials.pb) { %>
+                    <div class="mt-5 box content container has-text-centered is-flex is-flex-direction-column" style="max-width: 450px; min-width: 425px;">
+                        <h3 class="is-size-4 title">Price-to-Book</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Ratio</th>
+                                    <td><%= financials.pb && financials.pb %></td>
+                                </tr>
+                                <tr>
+                                    <th>Annual Ratio</th>
+                                    <td><%= financials.pbAnnual && financials.pbAnnual %></td>
+                                </tr>
+                                <tr>
+                                    <th>TTM</th>
+                                    <td><%= financials.pbQuarterly && financials.pbQuarterly %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<%- include('../partials/_header') %>
+    <title>Portfolio</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <% if (removePortfolio) { %>
+    <p class="ml-6 mr-5 mt-5 mb-3"><a href="/portfolio?id=<%= portfolio._id %>">Back to Portfolio</a></p>
+    <div class="ml-6 mr-5">
+        <h1 class="is-size-3">Remove Portfolio</h1>
+        <p>Are you sure you want to remove <strong><%= portfolio.name %></strong> from your portfolios?</p>
+        <p>This will permanently remove all assets from your portfolio and delete all past trades.</p>
+        <p>Once deleted, your portfolio cannot be recovered.</p>
+        <form class="mt-4" action="/portfolio/<%= portfolio._id %>?_method=DELETE" method="POST" class="mt-4">
+            <button type="submit" class="button is-light is-danger mt-3">Delete <%= portfolio.name %></button>
+        </form>
+    </div>
+    <% } %>
+
+    <% if (userStock) { %>
+    <p class="ml-6 mr-5 mt-5 mb-3"><a href="/portfolio?id=<%= portfolio._id %>">Back to Portfolio</a></p>
+    <div class="ml-6 mr-5">
+        <h1 class="is-size-3">Remove Stock</h1>
+        <p>Are you sure you want to remove <strong><%= userStock.stock.symbol %> (<%= userStock.stock.companyName %>)</strong> from your portfolio?</p>
+        <p>This will permanently remove the stock from <strong><%= portfolio.name %></strong> and delete all past trades.</p>
+        <p>Once deleted, this action cannot be undone.</p>
+        <form action="/portfolio/<%= portfolio._id %>/stocks/<%= userStock._id %>?_method=DELETE" method="POST" class="mt-4">
+            <button type="submit" class="button is-light is-danger mt-3">Delete <%= userStock.stock.symbol %></button>
+        </form>
+    </div>
+    <% } %>
+</body>
+</html>

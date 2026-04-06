@@ -1,0 +1,18 @@
+<%- include('../partials/_header') %>
+    <title>Portfolio</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <p class="ml-6 mr-5 mt-5 mb-3"><a href="/portfolio">Back to Portfolios</a></p>
+    <h1 class="is-size-3 mb-4 ml-5 mr-5 has-text-centered" style="font-weight: 600;">Create Portfolio</h1>
+    <div class="container" style="max-width: 450px;">
+        <form action="/portfolio" method="POST" class="box">
+            <div class="field">
+                <label for="name" class="label">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter portfolio name" required class="input is-normal"/>
+            </div>
+            <button type="submit" class="button is-link mt-2" style="width: 100%;">Create Portfolio</button>
+        </form>
+    </div>
+</body>
+</html>

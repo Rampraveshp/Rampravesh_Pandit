@@ -1,0 +1,190 @@
+<%- include('../partials/_header') %>
+    <title>Portfolio</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <% if (!activePortfolio) { %>
+            <h1 class="is-size-3 ml-6 mr-3 mt-5 mb-2">Portfolios</h1>
+            <a href="/portfolio/new" class="button is-link ml-6 mr-3 mt-1 mb-1">+ Create Portfolio</a>
+
+            <section class="ml-6 mr-3 mt-3 mb-4">
+                <div>
+                    <%- portfoliosSumValue && `<h2 class="is-size-4">Overview</h2>` %>
+                    <%- portfoliosSumValue && `<h2 class="is-size-3">$${portfoliosSumValue}</h2>` %>
+                </div>
+                <% if (summary) { %>
+                <div class="mt-2">
+                    <p class="is-size-7"><strong>Gain/Loss $</strong> <%= summary.unrealizedPL %></p>
+                    <p class="is-size-7"><strong>Gain/Loss %</strong> <%= summary.unrealizedPLPercent %></p>
+                </div>
+                <% } %>
+                <div class="is-flex is-flex-direction-column mt-3">
+                    <% portfolios.forEach(p => { %>
+                    <a href="/portfolio?id=<%= p._id %>" class="mt-2">
+                        <div class="is-flex is-flex-direction-column is-gap-0.5 button is-link is-outlined is-small">
+                            <p><%= p.name %></p>
+                            <p class="is-size-7">$<%= Number(p.totalValue.toFixed(2)).toLocaleString(); %></p>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+            </section>
+            <% } %>
+        </div>
+        <div class="column">
+            <% if (userStocks) { %>
+            <section class="ml-1 mr-6 mt-5 mb-5">
+                <h2 class="is-size-4 mb-5">All Positions</h2>
+                <table class="table is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Mkt Value</th>
+                        <th>Cost Basis</th>
+                        <th>Cost/Share</th>
+                        <th>Gain/Loss $</th>
+                        <th>Gain/Loss %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% userStocks.forEach((userStock) => { %>
+                    <tr>
+                        <td><a href="/stock/<%= userStock.stock.symbol %>"><%= userStock.stock.symbol %></a></td>
+                        <td><%= userStock.quantity %></td>
+                        <td>$<%= Number(userStock.stock.price.toFixed(2)).toLocaleString() %></td>
+                        <td>$<%= Number(userStock.marketValue).toLocaleString() %></td>
+                        <td>$<%= Number(userStock.totalCost.toFixed(2)).toLocaleString() %></td>
+                        <td>$<%= Number(userStock.costBasis.toFixed(2)).toLocaleString() %></td>
+                        <td class="unrealized-pl-data"><%= Number(userStock.unrealizedPL).toLocaleString() %></td>
+                        <td class="unrealized-pl-data"><%= userStock.unrealizedPLPercent %></td>
+                    </tr>
+                <% }) %>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Summary</th>
+                        <th><%= summary.qtSum %></th>
+                        <th></th>
+                        <th>$<%= summary.mktValueSum %></th>
+                        <th>$<%= summary.costBasisSum %></th>
+                        <th></th>
+                        <th>$<%= summary.unrealizedPL %></th>
+                        <th><%= summary.unrealizedPLPercent %></th>
+                    </tr>
+                </tfoot>
+                </table>
+            </section>
+            <% } %>
+        </div>
+    </div>
+
+    <% if (activePortfolio) { %>
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <p class="ml-6 mr-1 mb-5"><a href="/portfolio">Back to Overview</a></p>
+            <% if (activePortfolio.edit) { %>
+                <form action="/portfolio/<%= activePortfolio._id %>?_method=PUT" method="POST" class="ml-6 mr-5 mb-2">
+                    <input type="text" name="name" value="<%= activePortfolio.name %>" class="input is-normal" />
+                    <button type="submit" class="button is-link mt-3">update</button>
+                </form>
+                <div class="ml-6 mr-5 mb-4">
+                    <a href="/portfolio?id=<%= activePortfolio._id %>">close editor</a>
+                </div>
+            <% } else { %>
+                <h1 class="is-size-3 mb-1 ml-6 mr-5"><%= activePortfolio.name %></h1>
+                <div class="ml-6 mr-5 mb-4">
+                    <a href="/portfolio?id=<%= activePortfolio._id %>&edit=true">edit</a> |
+                    <a href="/portfolio/<%= activePortfolio._id %>/remove">remove</a>
+                </div>
+            <% } %>
+            <% if (summary) { %>
+            <div class="mt-2 ml-6 mr-5">
+                <p class="is-size-7"><strong>Gain/Loss $</strong> <%= summary.unrealizedPL %></p>
+                <p class="is-size-7"><strong>Gain/Loss %</strong> <%= summary.unrealizedPLPercent %></p>
+            </div>
+            <% } %>
+            <div class="is-flex is-flex-direction-column ml-6 mr-5 mt-4">
+                <% portfolios.forEach(p => { %>
+                <a href="/portfolio?id=<%= p._id %>" class="mt-2">
+                    <div class="is-flex is-flex-direction-column is-gap-0.5 button is-link is-outlined is-small">
+                        <p><%= p.name %></p>
+                        <p class="is-size-7">$<%= Number((p.totalValue).toFixed(2)).toLocaleString(); %></p>
+                    </div>
+                </a>
+                <% }); %>
+            </div>
+        </div>
+        <div class="column mt-2">
+            <div class="is-flex-direction-row is-flex is-gap-1 is-justify-content-left">
+                <h3 class="is-size-4">Portfolio Value</h3>
+                <h2 class="is-size-4">$<%= Number((activePortfolio.totalValue).toFixed(2)).toLocaleString() %></h2>
+            </div>
+            <section class="mr-6 mt-4 mb-4">
+                <h3 class="is-size-4 mb-4">Positions</h3>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Mkt Value</th>
+                            <th>Cost Basis</th>
+                            <th>Cost/Share</th>
+                            <th>Gain/Loss $</th>
+                            <th>Gain/Loss %</th>
+                            <% if (activePortfolio.edit) {%>
+                            <th></th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% activePortfolio.userStocks.forEach((userStock) => { %>
+                        <tr>
+                            <td><a href="/stock/<%= userStock.stock.symbol %>"><%= userStock.stock.symbol %></a></td>
+                            <td><%= userStock.quantity %></td>
+                            <td>$<%= Number(userStock.stock.price.toFixed(2)).toLocaleString() %></td>
+                            <td>$<%= Number(userStock.marketValue).toLocaleString() %></td>
+                            <td>$<%= (userStock.totalCost).toLocaleString() %></td>
+                            <td>$<%= Number(userStock.costBasis.toFixed(2)).toLocaleString() %></td>
+                            <td class="unrealized-pl-data"><%= Number(userStock.unrealizedPL).toLocaleString() %></td>
+                            <td class="unrealized-pl-data"><%= userStock.unrealizedPLPercent %></td>
+                            <% if (activePortfolio.edit) {%>
+                            <td>
+                                <a href="/portfolio/<%= activePortfolio._id %>/remove?id=<%= userStock._id %>" class="button is-light is-danger is-small">remove</a>
+                            </td>
+                            <% } %>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Summary</th>
+                            <th><%= summary.qtSum %></th>
+                            <th></th>
+                            <th>$<%= summary.mktValueSum %></th>
+                            <th>$<%= summary.costBasisSum %></th>
+                            <th></th>
+                            <th>$<%= summary.unrealizedPL %></th>
+                            <th><%= summary.unrealizedPLPercent %></th>
+                            <% if (activePortfolio.edit) {%>
+                            <th></th>
+                            <% } %>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="is-flex is-flex-direction-row mt-4 mb-4 is-gap-2">
+                    <p class="button is-link is-outlined"><a href="/portfolio/<%= activePortfolio._id %>/trades">View Trades</a></p>
+                    <p><a href="/portfolio/<%= activePortfolio._id %>/trades/new" class="button is-link">+ Add Trade</a></p>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <% } %>
+</body>
+</html>

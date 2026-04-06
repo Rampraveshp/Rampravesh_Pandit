@@ -1,0 +1,25 @@
+<%- include('../partials/_header') %>
+    <title>moneymoo</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <h1 class="is-size-3 ml-6 mr-6 mt-6 mb-5 has-text-centered" style="font-weight: 600;">Log In</h1>
+    <% if (loginError) { %>
+    <p class="is-size-6 ml-6 mr-6 mt-4 mb-4 has-text-centered">Login failed. Please try again.</p>
+    <% } %>
+    <div class="container" style="max-width: 450px;">
+        <form action="/auth/sign-in" method="POST" class="box">
+            <div class=field>
+                <label for="username" class="label">Username or Email</label>
+                <input type="text" id="username" name="username" required class="input is-normal" />
+            </div>
+            <div class="field">
+                <label for="password" class="label">Password</label>
+                <input type="password" id="password" name="password" required class="input is-normal" />
+            </div>
+            <button type="submit" class="button is-link mt-3 mb-5" style="width: 100%;">Log In</button>
+            <p class="has-text-centered">Don't have an account? <a href="/auth/sign-up">Sign Up</a></p>
+        </form>
+    </div>
+</body>
+</html>

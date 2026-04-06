@@ -1,0 +1,26 @@
+<nav class="navbar is-white p-1" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <div class="navbar-item"><img src="/img/moneymoo-logo.png" /></div>
+        <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false" id="navbarBurger">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu" id="navbarMenu">
+        <div class="navbar-start">
+            <a href="/" class="navbar-item">Home</a>
+            <% if (user) { %>
+            <a href="/portfolio" class="navbar-item">Portfolio</a>
+            <a href="/watchlist" class="navbar-item">Watchlist</a>
+            <% } %>
+            <a href="/browse?view=top-movers" class="navbar-item">Browse</a>
+        </div>
+        <% if (user) { %>
+        <div class="navbar-end">
+            <a href="/auth/sign-out" class="navbar-item">Log Out</a>
+        </div>
+        <% } %>
+    </div>
+</nav>

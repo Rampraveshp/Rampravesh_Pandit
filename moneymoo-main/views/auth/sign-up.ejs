@@ -1,0 +1,37 @@
+<%- include('../partials/_header') %>
+    <title>moneymoo</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+        <h1 class="is-size-3 ml-6 mr-6 mt-6 mb-4 has-text-centered" style="font-weight: 600;">Create a New Account</h1>
+        <% if (userExists) { %>
+        <p class="is-size-6 ml-6 mr-6 mt-4 mb-4 has-text-centered"><a href="/auth/sign-in">Log In</a> to your account</p>
+        <% } %>
+        <% if (passwordsDontMatch) { %>
+        <p class="is-size-6 ml-6 mr-6 mt-4 mb-4 has-text-centered">Passwords do not match.</p>
+        <% } %>
+
+        <div class="container" style="max-width: 450px;">
+            <form action="/auth/sign-up" method="POST" class="box">
+                <div class="field">
+                    <label for="username" class="label">Username</label>
+                    <input type="text" id="username" name="username" required class="input is-normal"/>
+                </div>
+                <div class="field">
+                    <label for="email" class="label">Email</label>
+                    <input type="email" id="email" name="email" required class="input is-normal" />
+                </div>
+                <div class="field">
+                    <label for="password" class="label">Password</label>
+                    <input type="password" id="password" name="password" required class="input is-normal" />
+                </div>
+                <div class="field">
+                    <label for="confirmPassword" class="label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required class="input is-normal" />
+                </div>
+                <button type="submit" class="button is-link mt-3 mb-5" style="width: 100%;">Sign Up</button>
+                <p class="has-text-centered">Already have an account? <a href="/auth/sign-in">Log In</a></p>
+            </form>
+        </div>
+</body>
+</html>

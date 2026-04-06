@@ -1,0 +1,105 @@
+<%- include('../partials/_header') %>
+<title>Browse</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <div class="container">
+        <div class="ml-6 mr-6 mt-6">
+            <h1 class="is-size-3 mb-4 has-text-centered" style="font-weight: 600;">Browse the Market</h1>
+            <div class="container is-centered" style="max-width: 450px;">
+                <form action="/search" method="POST" class="box is-gap-1 is-flex is-flex-direction-row is-align-items-center is-justify-content-space-between">
+                    <label for="symbol" class="label m-1">Ticker</label>
+                    <input type="text" name="symbol" id="symbol" class="input is-normal" required placeholder="GOOG"/>
+                    <button type="submit" class="button is-link">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="box mt-6 ml-6 mr-6 is-gap-3">
+            <div class="tabs is-centered mt-5 mb-6">
+                <ul>
+                    <li <%- activeTab === 'movers' && `class="is-active"` %>><a href="/browse?view=top-movers">Top Market Movers</a></li>
+                    <li <%- activeTab === 'volume' && `class="is-active"` %>><a href="/browse?view=active-by-volume">Active by Volume</a></li>
+                    <li <%- activeTab === 'trades' && `class="is-active"` %>><a href="/browse?view=active-by-trades">Active by Trades</a></li>
+                </ul>
+            </div>
+            <% if (topMarketMovers) { %>
+            <div>
+                <h2 class="is-size-4 has-text-centered mb-6 has-text-weight-semibold">Top Market Movers</h2>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-weight-semibold">Rank</th>
+                            <th class="has-text-weight-semibold">Symbol</th>
+                            <th class="has-text-weight-semibold">Price</th>
+                            <th class="has-text-weight-semibold">Change</th>
+                            <th class="has-text-weight-semibold">Change %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% topMarketMovers.forEach(stock => { %>
+                    <tr>
+                        <td class="has-text-weight-semibold"><%= topMarketMovers.indexOf(stock) + 1 %></td>
+                        <td class="has-text-weight-semibold"><a href="/stock/<%= stock.symbol %>"><%= stock.symbol %></a></td>
+                        <td>$<%= stock.price.toFixed(2) %></td>
+                        <td>$<%= stock.change %></td>
+                        <td><%= stock.percent_change.toFixed(2) %>%</td>
+                    </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            <% if (activeByVolume) { %>
+            <div>
+                <h2 class="is-size-4 has-text-centered mb-6 has-text-weight-semibold">Most Active by Volume</h2>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-weight-semibold">Rank</th>
+                            <th class="has-text-weight-semibold">Symbol</th>
+                            <th class="has-text-weight-semibold">Volume</th>
+                            <th class="has-text-weight-semibold">Trades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% activeByVolume.forEach(stock => { %>
+                    <tr>
+                        <td class="has-text-weight-semibold"><%= activeByVolume.indexOf(stock) + 1 %></td>
+                        <td class="has-text-weight-semibold"><a href="/stock/<%= stock.symbol %>"><%= stock.symbol %></a></td>
+                        <td><%= stock.volume.toLocaleString() %></td>
+                        <td><%= stock.trade_count.toLocaleString() %></td>
+                    </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            <% if (activeByTrades) { %>
+            <div>
+                <h2 class="is-size-4 has-text-centered mb-6 has-text-weight-semibold">Most Active by Trades</h2>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th class="has-text-weight-semibold">Rank</th>
+                            <th class="has-text-weight-semibold">Symbol</th>
+                            <th class="has-text-weight-semibold">Trades</th>
+                            <th class="has-text-weight-semibold">Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% activeByTrades.forEach(stock => { %>
+                    <tr>
+                        <td class="has-text-weight-semibold"><%= activeByTrades.indexOf(stock) + 1 %></td>
+                        <td class="has-text-weight-semibold"><a href="/stock/<%= stock.symbol %>"><%= stock.symbol %></a></td>
+                        <td><%= stock.trade_count.toLocaleString() %></td>
+                        <td><%= stock.volume.toLocaleString() %></td>
+                    </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

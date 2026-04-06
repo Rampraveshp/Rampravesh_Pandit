@@ -1,0 +1,28 @@
+<%- include('../partials/_header') %>
+<title>Search</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <h1 class="is-size-3 ml-6 mr-6 mb-2 mt-6 has-text-centered" style="font-weight: 600;">Search Results</h1>
+    <% if (results) { %>
+    <p class="ml-6 mr-6 has-text-centered">Showing <%= results.length %> results found.</p>
+    <div class="m-6 is-flex is-flex-direction-row is-flex-wrap-wrap is-gap-5 is-justify-content-center">
+        <% results.forEach((result) => { %>
+        <div class="box is-flex is-flex-direction-column is-gap-2 is-align-items-center mb-1" style="width: 225px;">
+            <a href="/stock/<%= result.symbol %>"><p class="button is-link is-inverted is-large" style="max-width: 100px;"><%= result.symbol %></p></a>
+            <div class="has-text-centered is-flex-direction-column">
+                <p class="is-size-7"><strong>NAME</strong></p>
+                <p><%= result.name %></p>
+            </div>
+            <div class=" has-text-centered is-flex-direction-column">
+                <p class="is-size-7"><strong>EXCHANGE</strong></p>
+                <p><%= result.exchangeFullName %></p>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+    <% } else { %>
+    <p class="ml-6 mr-6 has-text-centered">No results found.</p>
+    <% } %>
+</body>
+</html>

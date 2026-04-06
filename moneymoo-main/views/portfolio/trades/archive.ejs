@@ -1,0 +1,67 @@
+<%- include('../../partials/_header') %>
+    <title>Trades</title>
+</head>
+<body>
+    <%- include('../../partials/_navbar') %>
+    <p class="is-size-6 ml-6 mr-5 mb-3 mt-5"><a href="/portfolio?id=<%= portfolio._id %>">Back to Portfolio</a></p>
+    <h1 class="is-size-3 ml-6 mr-5 mt-2 mb-2"><%= portfolio.name %></h1>
+    <section class="ml-6 mr-6">
+        <h2 class="is-size-4 mb-3">Trades</h2>
+        <table class="table is-fullwidth is-hoverable">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Asset</th>
+                    <th>Shares</th>
+                    <th>Price/Share</th>
+                    <th>Notes</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% trades.forEach(trade => { %>
+                <% if (trade.edit) { %>
+                <form action="/portfolio/<%= portfolio._id %>/trades/<%= trade._id %>?_method=PUT" method="POST">
+                    <tr>
+                        <td><%= trade.type %></td>
+                        <td><input type="text" name="date" value="<%= trade.dateStr %>" class="input is-normal" /></td>
+                        <td><%= trade.stock.symbol %></td>
+                        <td><%= trade.quantity %></td>
+                        <td><%= trade.price %></td>
+                        <td><input type="text" name="notes" value="<%= trade.notes %>" class="input is-normal" /></td>
+                        <td>
+                            <button type="submit" class="button is-link">update</button>
+                        </td>
+                    </tr>
+                </form>
+                <% } else { %>
+                <tr>
+                    <td><%= trade.type %></td>
+                    <td><%= trade.dateStr %></td>
+                    <td><%= trade.stock.symbol %></td>
+                    <td><%= trade.quantity %></td>
+                    <td><%= trade.price %></td>
+                    <td><%= trade.notes %></td>
+
+                    <% if (trade.delete) { %>
+                    <td>
+                        <form action="/portfolio/<%= portfolio._id %>/trades/<%= trade._id %>?_method=DELETE" method="POST">
+                            <button type="submit" class="delete"></button>
+                        </form>
+                    </td>
+                    <% } else { %>
+                    <td>
+                        <a href="/portfolio/<%= portfolio._id %>/trades?edit=<%= trade._id %>">edit</a> |
+                        <a href="/portfolio/<%= portfolio._id %>/trades?delete=<%= trade._id %>">delete</a>
+                    </td>
+                    <% } %>
+                </tr>
+                <% } %>
+            <% }); %>
+            </tbody>
+        </table>
+        <!-- <p><a href="/portfolio/<%= portfolio._id %>/trades/new" class="button is-link">+ Add Trade</a></p> -->
+    </section>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<%- include('../partials/_header') %>
+    <title>Watchlist</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+    <div class="ml-5 mr-5">
+        <p class="ml-5 mt-5 mb-3"><a href="/watchlist">Back to Watchlists</a></p>
+        <div class="ml-6 mr-6">
+            <h1 class="is-size-3 mb-4 has-text-centered" style="font-weight: 600;">Create Watchlist</h1>
+            <div class="container" style="max-width: 450px;">
+                <form action="/watchlist" method="POST" class="box">
+                    <div class="field">
+                        <label for="name" class="label">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter watchlist name" required class="input is-normal"/>
+                    </div>
+                    <button type="submit" class="button is-link mt-2" style="width: 100%;">Create Watchlist</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

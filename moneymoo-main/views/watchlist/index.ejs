@@ -1,0 +1,142 @@
+<%- include('../partials/_header') %>
+    <title>Watchlist</title>
+</head>
+<body>
+    <%- include('../partials/_navbar') %>
+
+    <% if (!watchlists && !activeWatchlist) { %>
+    <div>
+        <h1 class="is-size-3 ml-6 mr-3 mt-5 mb-2">Watchlists</h1>
+        <a href="/watchlist/new" class="button is-link ml-6 mr-5 mt-1 mb-1">+ New Watchlist</a>
+    </div>
+    <% } %>
+
+    <% if (watchlists && !activeWatchlist) { %>
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <div>
+                <h1 class="is-size-3 ml-6 mr-3 mt-5 mb-2">Watchlists</h1>
+                <a href="/watchlist/new" class="button is-link ml-6 mr-5 mt-1 mb-1">+ New Watchlist</a>
+            </div>
+            <div class="ml-6 mr-5 mt-3 mb-4">
+                <h2 class="is-size-4 mb-3">Overview</h2>
+                    <div class="is-flex is-flex-direction-column is-gap-1">
+                    <% watchlists.forEach(list => { %>
+                    <a class="button is-link is-outlined is-small" style="max-width: 180px;" href="/watchlist?id=<%= list._id %>">
+                        <p><%= list.name %></p>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <% if (stocks) { %>
+            <section class="ml-1 mr-6 mt-5 mb-5">
+                <h2 class="is-size-4 mb-3">Full List</h2>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Price</th>
+                            <th>Day Change</th>
+                            <th>Day Change %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% stocks.forEach((stock) => { %>
+                        <tr>
+                            <td>
+                                <div class="symbol-and-image">
+                                    <img src="<%= stock.image %>" alt="logo for <%= stock.companyName %>" class="image is-16x16"/>
+                                    <a href="/stock/<%= stock.symbol %>"><%= stock.symbol %></a>
+                                </div>
+                            </td>
+                            <td><%= (stock.price).toFixed(2) %></td>
+                            <td><%= (stock.change).toFixed(2) %></td>
+                            <td><%= (stock.changePercentage).toFixed(2) %></td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </section>
+            <% } %>
+        </div>
+    </div>
+    <% } %>
+
+    <% if (activeWatchlist) { %>
+        <div class="columns">
+            <div class="column is-one-fifth ml-6">
+                <p class="mr-5 mt-5 mb-5"><a href="/watchlist">Back to Watchlists</a></p>
+                <% if (activeWatchlist.edit) { %>
+                <form action="/watchlist/<%= activeWatchlist._id %>?_method=PUT" method="POST" class="ml-1 mr-5 mt-2 mb-2">
+                    <input type="text" name="name" value="<%= activeWatchlist.name %>" class="input is-normal" />
+                    <button type="submit" class="button is-link mt-3">update</button>
+                </form>
+                <div class="mb-5">
+                    <a href="/watchlist?id=<%= activeWatchlist._id %>">close editor</a>
+                </div>
+                <% } else { %>
+                <h1 class="is-size-3 mb-1 mr-1"><%= activeWatchlist.name %></h1>
+                <div class="mb-5">
+                    <a href="/watchlist?id=<%= activeWatchlist._id %>&edit=true">edit</a> |
+                    <a href="/watchlist/<%= activeWatchlist._id %>/remove">remove</a>
+                </div>
+                <% } %>
+                <div class="is-flex is-flex-direction-column is-gap-1 mt-5">
+                    <% watchlists.forEach(list => { %>
+                    <a class="button is-link is-outlined is-small" style="max-width: 180px;" href="/watchlist?id=<%= list._id %>">
+                        <p><%= list.name %></p>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="column ml-0 mr-6 mt-6">
+                <% if (activeWatchlist.stocks.length <= 0) { %>
+                <p class="ml-0 mr-6 mt-3"><a href="/browse">Browse</a> for stocks and add to your watchlist.</p>
+                <% } else { %>
+                <table class="table is-hoverable is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Price</th>
+                            <th>Day Change</th>
+                            <th>Day Change %</th>
+                            <% if (activeWatchlist.edit) {%>
+                            <th>Remove</th>
+                            <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% activeWatchlist.stocks.forEach((stock) => { %>
+                    <tr>
+                        <td>
+                            <div class="symbol-and-image">
+                                <img src="<%= stock.image %>" alt="logo for <%= stock.companyName %>" class="image is-16x16"/>
+                                <a href="/stock/<%= stock.symbol %>"><%= stock.symbol %></a>
+                            </div>
+                        </td>
+                        <td><%= stock.price %></td>
+                        <td><%= (stock.change).toFixed(2) %></td>
+                        <td><%= (stock.changePercentage).toFixed(2) %></td>
+                        <% if (activeWatchlist.edit) {%>
+                        <td>
+                            <form action="/watchlist/<%= activeWatchlist._id %>/remove?id=<%= stock._id %>&_method=PUT" method="POST">
+                                <button class="delete" type="submit"></button>
+                            </form>
+                        </td>
+                        <% } %>
+                    </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+
+    <% if (!stocks && !activeWatchlist) { %>
+    <p class="ml-6 mr-5 mt-3"><a href="/browse">Browse</a> for stocks and add to your watchlist(s).</p>
+    <% } %>
+</body>
+</html>
